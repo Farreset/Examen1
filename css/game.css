@@ -6,7 +6,7 @@ script{
   object-position: center;
 }
 .background    { 
-  background-image: url(assets/lvl1.jpg);
+  background-image: url(/assets/lvl1.jpg);
  background-color: cyan;
                  table-layout: fixed;
                  border-spacing: 0;  
