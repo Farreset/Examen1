@@ -29,10 +29,11 @@ var Level = class Level {
 }
 
 var State = class State {
-  constructor(level, actors, status) {
+  constructor(level, actors, status, lives) {
     this.level = level;
     this.actors = actors;
     this.status = status;
+    this.lives = lives;
   }
 
   static start(level) {
@@ -83,11 +84,15 @@ var Lava = class Lava {
 
   static create(pos, ch) {
     if (ch == "=") {
-      return new Lava(pos, new Vec(2, 0));
+      return new Lava(pos, new Vec(4, 0));
     } else if (ch == "|") {
-      return new Lava(pos, new Vec(0, 2));
+      return new Lava(pos, new Vec(0, 4));
     } else if (ch == "v") {
-      return new Lava(pos, new Vec(0, 3), pos);
+      return new Lava(pos, new Vec(0, 7), pos);
+    }else if (ch == "/") {
+      return new Lava(pos, new Vec(4, 4));
+    }else if (ch == "\\") {
+      return new Lava(pos, new Vec(4, -4));
     }
   }
 }
@@ -115,7 +120,7 @@ Coin.prototype.size = new Vec(0.6, 0.6);
 var levelChars = {
   ".": "empty", "#": "wall", "+": "lava",
   "@": Player, "o": Coin,
-  "=": Lava, "|": Lava, "v": Lava
+  "=": Lava, "|": Lava, "v": Lava, "/": Lava, "\\": Lava
 };
 
 var simpleLevel = new Level(simpleLevelPlan);
@@ -141,7 +146,7 @@ var DOMDisplay = class DOMDisplay {
   clear() { this.dom.remove(); }
 }
 
-var scale = 20;
+var scale = 30;
 
 function drawGrid(level) {
   return elt("table", {
@@ -272,7 +277,7 @@ Coin.prototype.update = function(time) {
                   this.basePos, wobble);
 };
 
-var playerXSpeed = 7;
+var playerXSpeed = 8.5;
 var gravity = 30;
 var jumpSpeed = 17;
 
