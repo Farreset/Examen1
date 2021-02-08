@@ -6,11 +6,10 @@ script{
   object-position: center;
 }
 .background    { 
-  background-image: url(/assets/lvl1.jpg);
- background-color: cyan;
-                 table-layout: fixed;
-                 border-spacing: 0;  
-                 }
+background-color: cyan;
+table-layout: fixed;
+border-spacing: 0;  
+}
 .background td { padding: 0;          }
 .lava          { background: rgb(255, 100, 100); }
 .wall          { background: white;   }
@@ -36,7 +35,15 @@ script{
   box-shadow: -4px -7px 8px white, 4px -7px 8px white;
 }
 .menu{
-
+  background-color: blue;
+  margin-bottom: 15px;
+  width: 100%;
+  height:100%;
+  position:absolute;
+  z-index: 3;
+}
+.menu:hover{
+  display:none
 }
 /*BOTONES*/
 .gamebutton {
@@ -52,4 +59,5 @@ script{
 	font-family:ＭＳ Ｐゴシック;
 	font-weight: bold;
 	font-size: x-large;
+  z-index: 5;
 }
