@@ -8,16 +8,17 @@
   <table>
     <tr>
       <button id="reset" class="gamebutton" onclick="this.blur();"></button>
-      <button id="pause" class= "gamebutton" onclick="this.blur();"></button>
+      <button id="pause" class= "gamebutton" onclick="this.blur();">pause</button>
     </tr>
   </tr>
   
 <ul>
-  <li id="lives">LIVES: 5</li>
-  <li id="level">LVL: 1</li>
+  <li id="lives" class="mod">LIVES: 3</li>
+  <li id="level" class="mod">LVL: 1</li>
   </ul>
 </table>
 <div class="menu"></div>
+
   <script>
     runGame(GAME_LEVELS, DOMDisplay);
   </script>

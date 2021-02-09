@@ -356,10 +356,12 @@ function runLevel(level, Display) {
 
 async function runGame ( plans, Display )
 {
-  this.lives = 5;
+  this.lives = 3;
+  document.getElementById("reset").addEventListener("click", () => { document.location.reload();});
+  document.getElementById("pause").addEventListener("click", () => {this.paused});
   this.livesView = document.getElementById( "lives" );
   this.levelView = document.getElementById( "level" );
-  for ( let level = 0; level < plans.length && lives>0;) {
+  for ( let level = 0; level < plans.length && lives > 0;) {
     let status = await runLevel(new Level(plans[level]),
                                 Display);
     if ( status == "won" )
@@ -379,11 +381,15 @@ async function runGame ( plans, Display )
   {
     console.log( "You've won!" );
     document.location.reload();
+    document.write()
   }
-  else 
+  else
   {
 console.log( "PERDISTE!" );
     document.location.reload();
+    
   }
-  
+ 
 }
+
+
