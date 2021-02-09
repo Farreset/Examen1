@@ -3,25 +3,39 @@ margin: 0%;
 padding: 0%;
 
 }
+body{
+  background-color:black;
+}
 
 .background    { 
-background-color:blueviolet;
+background-image:url(assets/hornoPorno.jpg) ;
 background-position: center;
 background-size: contain; 
 width: 100%;
 height: 120px;
 table-layout: fixed;
 border-spacing: 0;  
-
 }
 .background td { padding: 0;          }
-.lava          { background: rgb(255, 100, 100); }
-.wall          { background: white;   }
+.lava          { background-image:url(assets/lava.png) ;
+  background-position: center;
+  background-size: contain;  }
+.wall          { background-image:url(assets/stone.png) ;
+  background-position: center;
+  background-size: contain;   }
 
 .actor  { position: absolute;  }
-.coin   { background: rgb(241, 229, 89); }
-.player { background: black; }
-
+.coin   {  background-size: cover;
+  background-image: url(assets/mon.png);
+  background-position: center;}
+.player { background-size: cover;
+background-image: url(assets/py.png);
+background-position: center; }
+.bala{
+  background-size: cover;
+  background-image: url(assets/balita.gif);
+  background-position: center;
+}
 .game {
 
 overflow: hidden;
@@ -68,7 +82,7 @@ position: absolute;
 padding: 0; 
 float: right;
 background-repeat: no-repeat;
-background: url(repeat.png);
+background: url(assets/repeat.png);
 width: 50px;
 height:50px;
 overflow:hidden;

@@ -84,19 +84,37 @@ var Lava = class Lava {
 
   static create(pos, ch) {
     if (ch == "=") {
-      return new Lava(pos, new Vec(4, 0));
+      return new Lava (pos, new Vec(6, 0));
     } else if (ch == "|") {
-      return new Lava(pos, new Vec(0, 4));
+      return new Lava(pos, new Vec(0, 6));
     } else if (ch == "v") {
-      return new Lava(pos, new Vec(0, 7), pos);
+      return new Lava(pos, new Vec(0, 8), pos);
     }else if (ch == "/") {
-      return new Lava(pos, new Vec(4, 4));
+      return new Lava(pos, new Vec(-6, 6), pos);
     }else if (ch == "\\") {
-      return new Lava(pos, new Vec(4, -4));
+      return new Lava(pos, new Vec(6, 6),  pos);
+    }else if (ch == "H") {
+      return new Lava(pos, new Vec(0, -8), pos);
     }
   }
 }
+var Bala = class Bala {
+  constructor(pos, speed, reset) {
+    this.pos = pos;
+    this.speed = speed;
+    this.reset = reset;
+  }
 
+  get type() { return "bala"; }
+
+  static create(pos, ch) {
+    if (ch == "c") {
+      return new Bala(pos, new Vec(6, 0), pos);
+    } 
+  
+}
+}
+Bala.prototype.size = new Vec(1, 1);
 Lava.prototype.size = new Vec(1, 1);
 
 var Coin = class Coin {
@@ -120,8 +138,7 @@ Coin.prototype.size = new Vec(0.6, 0.6);
 var levelChars = {
   ".": "empty", "#": "wall", "+": "lava",
   "@": Player, "o": Coin,
-  "=": Lava, "|": Lava, "v": Lava, "/": Lava, "\\": Lava
-};
+  "=": Lava, "|": Lava, "v": Lava, "/": Lava, "\\": Lava, "H" : Lava, "c":Bala};
 
 var simpleLevel = new Level(simpleLevelPlan);
 
@@ -249,6 +266,9 @@ function overlap(actor1, actor2) {
 Lava.prototype.collide = function(state) {
   return new State(state.level, state.actors, "lost");
 };
+Bala.prototype.collide = function(state) {
+  return new State(state.level, state.actors, "lost");
+};
 
 Coin.prototype.collide = function(state) {
   let filtered = state.actors.filter(a => a != this);
@@ -267,6 +287,16 @@ Lava.prototype.update = function(time, state) {
     return new Lava(this.pos, this.speed.times(-1));
   }
 };
+Bala.prototype.update = function(time, state) {
+  let newPos = this.pos.plus(this.speed.times(time));
+  if (!state.level.touches(newPos, this.size, "wall")) {
+    return new Bala(newPos, this.speed, this.reset);
+  } else if (this.reset) {
+    return new Bala(this.reset, this.speed, this.reset);
+  } else {
+    return new Bala(this.pos, this.speed.times(-1));
+  }
+};
 
 var wobbleSpeed = 8, wobbleDist = 0.07;
 
@@ -278,7 +308,7 @@ Coin.prototype.update = function(time) {
 };
 
 var playerXSpeed = 8.5;
-var gravity = 30;
+var gravity = 32;
 var jumpSpeed = 17;
 
 Player.prototype.update = function(time, state, keys) {
