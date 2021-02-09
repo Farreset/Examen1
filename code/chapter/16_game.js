@@ -354,11 +354,36 @@ function runLevel(level, Display) {
   });
 }
 
-async function runGame(plans, Display) {
-  for (let level = 0; level < plans.length;) {
+async function runGame ( plans, Display )
+{
+  this.lives = 5;
+  this.livesView = document.getElementById( "lives" );
+  this.levelView = document.getElementById( "level" );
+  for ( let level = 0; level < plans.length && lives>0;) {
     let status = await runLevel(new Level(plans[level]),
                                 Display);
-    if (status == "won") level++;
+    if ( status == "won" )
+    {
+      level++;
+    this.levelView.innerHTML = "LVL: " + `${ level + 1 }`;
+ 
+    }
+    else
+    {
+      lives--;
+      this.livesView.innerHTML = "LIVES: " +this.lives;
+    }
+      
   }
-  console.log("You've won!");
+  if ( lives > 0 )
+  {
+    console.log( "You've won!" );
+    document.location.reload();
+  }
+  else 
+  {
+console.log( "PERDISTE!" );
+    document.location.reload();
+  }
+  
 }
