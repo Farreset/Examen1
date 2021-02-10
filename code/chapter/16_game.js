@@ -72,19 +72,6 @@ var Player = class Player {
 
 Player.prototype.size = new Vec(1, 1.5);
 
-
-
-var Monster = class Monster {
-  constructor(pos) { this.pos = pos; }
-
-  get type() { return "monster"; }
-
-  static create(pos) {
-  return new Monster(pos.plus(new Vec(0, -1))); }
-}
-
-Monster.prototype.size = new Vec(13, 2);
-
 var Lava = class Lava {
   constructor(pos, speed, reset) {
     this.pos = pos;
@@ -110,6 +97,7 @@ var Lava = class Lava {
     }
   }
 }
+
 var Bala = class Bala {
   constructor(pos, speed, reset) {
     this.pos = pos;
@@ -121,7 +109,7 @@ var Bala = class Bala {
 
   static create(pos, ch) {
     if (ch == "c") {
-      return new Bala(pos, new Vec(23, 0), pos);
+      return new Bala(pos, new Vec(35, 0), pos);
     } 
   
 }
@@ -148,7 +136,7 @@ var Coin = class Coin {
 Coin.prototype.size = new Vec(0.6, 0.6);
 
 var levelChars = {
-  ".": "empty", "#": "wall", "+": "lava","M":"monster",
+  ".": "empty", "#": "wall", "+": "lava",
   "@": Player, "o": Coin,
   "=": Lava, "|": Lava, "v": Lava, "/": Lava, "\\": Lava, "H" : Lava, "c":Bala};
 
@@ -323,7 +311,7 @@ Coin.prototype.update = function(time) {
 var playerXSpeed = 8.5;
 var gravity = 32;
 var jumpSpeed = 17;
-var monsterSpeed = 4;
+
 
 Player.prototype.update = function(time, state, keys) {
   let xSpeed = 0;
@@ -347,23 +335,6 @@ Player.prototype.update = function(time, state, keys) {
   return new Player(pos, new Vec(xSpeed, ySpeed));
 };
 
-function update(time, state) {
-  let player = state.player;
-  let speed = (player.pos.x < this.pos.x ? -1 : 1) * time * monsterSpeed;
-  let newPos = new Vec(this.pos.x + speed, this.pos.y);
-  if (state.level.touches(newPos, this.size, "wall")) return this;
-  else return new Monster(newPos);
-}
-
-function collide(state) {
-  let player = state.player;
-  if (player.pos.y + player.size.y < this.pos.y + 0.5) {
-    let filtered = state.actors.filter(a => a != this);
-    return new State(state.level, filtered, state.status);
-  } else {
-    return new State(state.level, state.actors, "lost");
-  }
-}
 
 function trackKeys(keys) {
   let down = Object.create(null);
@@ -428,6 +399,8 @@ async function runGame ( plans, Display )
   for ( let level = 0; level < plans.length && lives > 0;) {
     let status = await runLevel(new Level(plans[level]),
                                 Display);
+    
+    
     if ( status == "won" )
     {
       level++;
@@ -446,7 +419,7 @@ async function runGame ( plans, Display )
     console.log( "You've won!" );
     document.location.reload();
     document.write()
-  }
+  } 
   else
   {
 console.log( "PERDISTE!" );
@@ -456,8 +429,89 @@ console.log( "PERDISTE!" );
  
 }
 
+var Monster = class Monster {
+  constructor( pos, speed, reset ) {
+    this.pos = pos;
+    this.speed = speed;
+    this.reset = reset;
+  }
 
+  get type() {
+    return "monster";
+  }
 
+  static create( pos ) {
+    return new Monster( pos.plus( new Vec( 0, -1 ) ), new Vec( 9, 0 ) );
+  }
+
+  update( time, state ) {
+    let newPos = this.pos.plus( this.speed.times( time ) );
+  
+    if ( !state.level.touches( newPos, this.size, "wall" ) ) {
+      return new Monster( newPos, this.speed, this.reset );
+      
+    } else {
+      return new Monster( this.pos, this.speed.times( -1 ) );
+    }
+  }
+
+  collide( state ) {
+    let player = state.player;
+  
+    if ( player.pos.y + player.size.y < this.pos.y + 0.5 ) {
+      let filtered = state.actors.filter( a => a != this );
+      return new State( state.level, filtered, state.status );
+      
+    } else {
+      return new State( state.level, state.actors, "lost" );
+    }
+  }
+}
+
+Monster.prototype.size = new Vec( 4.5, 4 );
+levelChars[ "M" ] = Monster;
+
+var Enemy = class Enemy {
+  constructor( pos, speed, reset ) {
+    this.pos = pos;
+    this.speed = speed;
+    this.reset = reset;
+  }
+
+  get type() {
+    return "enemy";
+  }
+
+  static create( pos ) {
+    return new Enemy( pos.plus( new Vec( 0, -1 ) ), new Vec( 9, 0 ) );
+  }
+
+  update( time, state ) {
+    let newPos = this.pos.plus( this.speed.times( time ) );
+  
+    if ( !state.level.touches( newPos, this.size, "wall" ) ) {
+      return new Enemy( newPos, this.speed, this.reset );
+      
+    } else {
+      return new Enemy( this.pos, this.speed.times( -1 ) );
+    }
+  }
+
+  collide( state ) {
+    let player = state.player;
+  
+    if ( player.pos.y + player.size.y < this.pos.y + 0.5 ) {
+      let filtered = state.actors.filter( a => a != this );
+      return new State( state.level, filtered, state.status );
+      
+    } else {
+      return new State( state.level, state.actors, "lost" );
+    }
+  }
+}
+
+Enemy.prototype.size = new Vec( 1.5, 2 );
+levelChars[ "e" ] = Enemy;
 
 
 

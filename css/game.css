@@ -38,8 +38,16 @@ background-position: center; }
   background-image: url(assets/go.png);
   background-position: center;
 }
-
-.monster { background: purple; }
+.enemy {
+  background-size: cover;
+  background-image: url(assets/enemy.gif);
+  background-position: center;
+}
+.monster {
+  background-size: cover;
+  background-image: url(assets/monster.png);
+  background-position: center;
+}
 
 .game {
 overflow: hidden;
