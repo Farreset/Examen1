@@ -1,7 +1,7 @@
 *{
 margin: 0%;
 padding: 0%;
-
+scroll-behavior:auto;
 }
 body{
   background-color:black;
@@ -59,22 +59,30 @@ text-align: center;
 }
 
 .lost .player {
-background: rgb(160, 64, 64);
+  background-size: cover;
+  background-image: url(assets/died.png);
+  background-position: center;
 }
 .won .player {
-box-shadow: -4px -7px 8px white, 4px -7px 8px white;
+  background-size: cover;
+  background-image: url(assets/win.png);
+  background-position: center;
 }
-/*.menu{
-background-color: blue;
-margin-bottom: 15px;
-width: 100%;
-height:100%;
-position:absolute;
-z-index: 3;
-}*/
-.menu:hover{
-display:none
+.Menu {
+  font-family: 'Raleway', Arial, sans-serif;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 1px;
+  -webkit-user-select: none;
+  z-index: 999;
+  font-size: 20px;
 }
+
 /*BOTONES*/
 .gamebutton {
 /*border: none;
@@ -95,17 +103,18 @@ padding: 0;
 float: right;
 background-repeat: no-repeat;
 background: url(assets/repeat.png);
-width: 50px;
-height:50px;
+background-size: cover;
+background-position: center;
+width:25px;
+height:25px;
 overflow:hidden;
 display:block;
 border: none; 
-background-repeat:no-repeat;
 margin-left: auto;
 margin-right: auto; 
 display:inline-block;
-right:200px;
-bottom:240px;
+right:70px;
+top: 50px;
  
 }
 #reset:hover{
@@ -118,9 +127,22 @@ outline:none;
 }
 
 #pause{
-float:right;
-right:70px;
-bottom:250px
+  padding: 0; 
+  float: right;
+  background-repeat: no-repeat;
+  background: url(assets/play.png);
+  width:25px;
+  height:25px;
+  overflow:hidden;
+  display:block;
+  border: none; 
+  background-size: cover;
+  background-position: center;
+  margin-left: auto;
+  margin-right: auto; 
+  display:inline-block;
+  right:30px;
+  top: 50px;
 }
 .mod{
   color: white;
@@ -129,6 +151,7 @@ z-index: 12;
 list-style-type: none;
 }
 #lives{
+  
 top: 50px;
 left:100px
 }
@@ -140,3 +163,9 @@ left:200px
   top: 50px;
   left:300px
   }
+ .esc{
+  bottom: 400px;
+  left:10px;
+  color: white;
+  position: absolute;
+ }

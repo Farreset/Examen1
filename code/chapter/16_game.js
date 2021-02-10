@@ -1,3 +1,4 @@
+
 var simpleLevelPlan = `
 ......................
 ..#................#..
@@ -87,13 +88,13 @@ var Lava = class Lava {
     } else if (ch == "|") {
       return new Lava(pos, new Vec(0, 6));
     } else if (ch == "v") {
-      return new Lava(pos, new Vec(0, 8), pos);
+      return new Lava(pos, new Vec(0, 10), pos);
     }else if (ch == "/") {
       return new Lava(pos, new Vec(-6, 6), pos);
     }else if (ch == "\\") {
       return new Lava(pos, new Vec(6, 6),  pos);
     }else if (ch == "H") {
-      return new Lava(pos, new Vec(0, -8), pos);
+      return new Lava(pos, new Vec(0, -10), pos);
     }
   }
 }
@@ -163,7 +164,7 @@ var DOMDisplay = class DOMDisplay {
   clear() { this.dom.remove(); }
 }
 
-var scale = 30;
+var scale = 25;
 
 function drawGrid(level) {
   return elt("table", {
@@ -269,12 +270,14 @@ Lava.prototype.collide = function(state) {
 Bala.prototype.collide = function(state) {
   return new State(state.level, state.actors, "lost");
 };
-
+let coin = 0;
 Coin.prototype.collide = function(state) {
+  coin++;
   let filtered = state.actors.filter(a => a != this);
   let status = state.status;
+  document.getElementById("score").innerHTML = "SCORE: " + coin;
   if (!filtered.some(a => a.type == "coin"))
-    status = "won";
+    status = "won", coin== 0;
   return new State(state.level, filtered, status);
 };
 
@@ -309,8 +312,8 @@ Coin.prototype.update = function(time) {
 };
 
 var playerXSpeed = 8.5;
-var gravity = 32;
-var jumpSpeed = 17;
+var gravity = 40;
+var jumpSpeed = 20;
 
 
 Player.prototype.update = function(time, state, keys) {
@@ -335,23 +338,6 @@ Player.prototype.update = function(time, state, keys) {
   return new Player(pos, new Vec(xSpeed, ySpeed));
 };
 
-
-function trackKeys(keys) {
-  let down = Object.create(null);
-  function track(event) {
-    if (keys.includes(event.key)) {
-      down[event.key] = event.type == "keydown";
-      event.preventDefault();
-    }
-  }
-  window.addEventListener("keydown", track);
-  window.addEventListener("keyup", track);
-  return down;
-}
-
-var arrowKeys =
-  trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp"]);
-
 function runAnimation(frameFunc) {
   let lastTime = null;
   function frame(time) {
@@ -366,11 +352,32 @@ function runAnimation(frameFunc) {
 }
 
 function runLevel(level, Display) {
+
   let display = new Display(document.body, level);
   let state = State.start(level);
   let ending = 1;
+  let pausa = "start";
+
   return new Promise(resolve => {
-    runAnimation(time => {
+    function escHandler(event) {
+      if (event.key != "Escape") return;
+      event.preventDefault();
+      if (pausa == "stop") {
+        pausa = "start";
+        runAnimation(frame);
+      } else if (pausa == "start") {
+        pausa = "stop";
+      } else {
+        pausa = "start"
+      }
+    }
+    window, addEventListener("keydown", escHandler);
+    let arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp"]);
+
+    function frame(time) {
+      if (pausa == "stop") {
+        return false;
+      }
       state = state.update(time, arrowKeys);
       display.syncState(state);
       if (state.status == "playing") {
@@ -380,20 +387,39 @@ function runLevel(level, Display) {
         return true;
       } else {
         display.clear();
+        window.removeEventListener("keydown", escHandler);
+        arrowKeys.unregister();
         resolve(state.status);
         return false;
       }
-    });
+    }
+    runAnimation(frame);
   });
-}
+};
 
+function trackKeys(keys) {
+  let down = Object.create(null);
+
+  function track(event) {
+    if (keys.includes(event.key)) {
+      down[event.key] = event.type == "keydown";
+      event.preventDefault();
+    }
+  }
+    window.addEventListener("keydown", track);
+    window.addEventListener("keyup", track);
+    down.unregister = () => {
+    window.removeEventListener("keydown", track);
+    window.removeEventListener("keyup", track);
+  };
+  return down;
+}
 async function runGame ( plans, Display )
 {
-  this.score = 0;
-  this.lives = 3;
-  document.getElementById("reset").addEventListener("click", () => { document.location.reload();});
-  document.getElementById('score').innerHTML = "SCORE: "+ `${this.score}`;
   
+  this.lives = 5;
+  document.getElementById("reset").addEventListener("click", () => { document.location.reload();});
+
   this.livesView = document.getElementById( "lives" );
   this.levelView = document.getElementById( "level" );
   for ( let level = 0; level < plans.length && lives > 0;) {
