@@ -115,6 +115,7 @@ right:70px;
 bottom:250px
 }
 .mod{
+  color: white;
 position: absolute;
 z-index: 12;
 list-style-type: none;
@@ -127,3 +128,7 @@ left:100px
 top: 50px;
 left:200px
 }
+#score{
+  top: 50px;
+  left:300px
+  }
