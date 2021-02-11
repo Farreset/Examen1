@@ -417,13 +417,14 @@ function runLevel(level, Display) {
 };
 
 
+
 //funcion principal juego 
 async function runGame ( plans, Display )
 {
  
   this.lives = 5;
   document.getElementById( "reset" ).addEventListener( "click", () => { document.location.reload(); } );
-  this.livesView = document.getElementById( "lives" ).reset();
+  this.livesView = document.getElementById( "lives" );
   this.levelView = document.getElementById( "level" );
   for ( let level = 0; level < plans.length && lives > 0;) {
     let status = await runLevel(new Level(plans[level]),
@@ -439,12 +440,12 @@ async function runGame ( plans, Display )
     }
     else
     {
-       
       lives--;
       this.livesView.innerHTML = "LIVES: " + this.lives;
-      //document.getElementById("score").reset();
+     // resetscore(rescore);
     }
-  
+
+
  
   }
     if ( lives <= 0 ) {
@@ -452,7 +453,11 @@ async function runGame ( plans, Display )
     } else  {
       show( 'win' );
     } 
-  }
+}
+//function resetscore ()
+//{
+//  var rescore = document.getElementById("score").reset();
+//}
 
 var container = document.getElementById('container');
 setTimeout(function () {
