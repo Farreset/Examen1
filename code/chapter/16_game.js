@@ -339,6 +339,24 @@ Player.prototype.update = function(time, state, keys) {
   return new Player(pos, new Vec(xSpeed, ySpeed));
 };
 
+function trackKeys(keys) {
+  let down = Object.create(null);
+
+  function track(event) {
+    if (keys.includes(event.key)) {
+      down[event.key] = event.type == "keydown";
+      event.preventDefault();
+    }
+  }
+    window.addEventListener("keydown", track);
+    window.addEventListener("keyup", track);
+    down.unregister = () => {
+    window.removeEventListener("keydown", track);
+    window.removeEventListener("keyup", track);
+  };
+  return down;
+}
+
 function runAnimation(frameFunc) {
   let lastTime = null;
   function frame(time) {
@@ -398,29 +416,14 @@ function runLevel(level, Display) {
   });
 };
 
-function trackKeys(keys) {
-  let down = Object.create(null);
 
-  function track(event) {
-    if (keys.includes(event.key)) {
-      down[event.key] = event.type == "keydown";
-      event.preventDefault();
-    }
-  }
-    window.addEventListener("keydown", track);
-    window.addEventListener("keyup", track);
-    down.unregister = () => {
-    window.removeEventListener("keydown", track);
-    window.removeEventListener("keyup", track);
-  };
-  return down;
-}
 //funcion principal juego 
 async function runGame ( plans, Display )
 {
+ 
   this.lives = 5;
-  document.getElementById("reset").addEventListener("click", () => { document.location.reload();});
-  this.livesView = document.getElementById( "lives" );
+  document.getElementById( "reset" ).addEventListener( "click", () => { document.location.reload(); } );
+  this.livesView = document.getElementById( "lives" ).reset();
   this.levelView = document.getElementById( "level" );
   for ( let level = 0; level < plans.length && lives > 0;) {
     let status = await runLevel(new Level(plans[level]),
@@ -428,23 +431,35 @@ async function runGame ( plans, Display )
 
     if ( status == "won" )
     {
+      lives++;
+      this.livesView.innerHTML = "LIVES: " + this.lives;
       level++;
     this.levelView.innerHTML = "LVL: " + `${ level + 1 }`;
  
     }
     else
     {
+       
       lives--;
-      this.livesView.innerHTML = "LIVES: " +this.lives;
+      this.livesView.innerHTML = "LIVES: " + this.lives;
+      //document.getElementById("score").reset();
     }
+  
+ 
+  }
     if ( lives <= 0 ) {
       show( 'loser' );
     } else  {
       show( 'win' );
     } 
   }
- 
-}
+
+var container = document.getElementById('container');
+setTimeout(function () {
+  container.classList.add('cerrar');
+  document.body.style.overflowY = "visible";// despueés de cargar le devolvemos el scroll
+}, 2000 );
+
 //imagen final 
 function oculto( id ) {
   var elemento = document.getElementById( id );
@@ -468,7 +483,7 @@ var Monster = class Monster {
   }
 
   static create( pos ) {
-    return new Monster( pos.plus( new Vec( 0, -1 ) ), new Vec( 9, 0 ) );
+    return new Monster( pos.plus( new Vec( 0, -1 ) ), new Vec( 4, 0 ) );
   }
 
   update( time, state ) {
@@ -484,7 +499,7 @@ var Monster = class Monster {
 //hitbox monstruo
   collide( state ) {
     let player = state.player;
-    killM+=500;
+    killM+=700;
     if ( player.pos.y + player.size.y < this.pos.y + 0.5 ) {
       let filtered = state.actors.filter( a => a != this );
       document.getElementById("score").innerHTML = "SCORE: " + (kill + coin + killM);
@@ -498,7 +513,7 @@ var Monster = class Monster {
   }
 }
 
-Monster.prototype.size = new Vec( 4.5, 4 );
+Monster.prototype.size = new Vec( 5.5, 5 );
 levelChars[ "M" ] = Monster;
 
 let kill = 0;

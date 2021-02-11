@@ -122,7 +122,7 @@ border: none;
 outline:none;
 }
 
-#pause{
+/*#pause{
   padding: 0; 
   float: right;
   background-repeat: no-repeat;
@@ -139,7 +139,7 @@ outline:none;
   display:inline-block;
   right:30px;
   top: 50px;
-}
+}*/
 .mod{
   color: white;
 position: absolute;
@@ -160,11 +160,12 @@ left:200px
   left:300px
   }
  .esc{
-  bottom: 400px;
-  left:10px;
+ right:170px;
+ top: 50px;
   color: white;
+   z-index: 99999;
   position: absolute;
- }/*
+ }
  #win{
   background-image:url(assets/you_win.png) ;
   border:0px;
@@ -175,9 +176,9 @@ left:200px
   top: 100px;
   background-repeat: no-repeat;
   display: none;
-  z-index: 999;
+  z-index: 999999;
   position: absolute;
-}*/
+}
 #loser {
   background-image:url(assets/game_over.png) ;
   border-style: none;
@@ -189,7 +190,67 @@ left:200px
   top: 100px;
   background-repeat: no-repeat;
   display: none;
-  z-index: 999;
+  z-index: 999999;
   position: absolute;
   
+}
+.container {
+  z-index: 99999999999999999999999;
+position: absolute;
+top: 0;
+background-repeat: no-repeat;
+background-size: cover;
+background-position: center;
+background-image:url(assets/fondomenu.png);
+color: #fff;
+width: 100%;
+min-height: 100vh;
+display: flex;
+}
+
+.preloader {
+margin: auto;
+
+width: 350px;
+height: 30px;
+background: rgba(255,255,255,0.1);
+z-index: 99999999999999999999999;
+position: relative;
+}
+
+.preloader:before {
+content: "";
+position: absolute;
+background-image:url(assets/fondomenu.png);
+width: 0;
+height: 30px;
+
+animation: preloader 10s infinite;
+}
+
+.preloader p {
+margin: 0;
+line-height: 30px;
+font-size: 25px;
+font-weight: bold;
+
+position: absolute;
+left: 50%;
+transform: translateX(-50%);
+}
+
+.cerrar {
+transform: translateY(-100%);
+transition: all 0.5s;
+}
+
+@keyframes preloader {
+90% {
+width: 100%;
+opacity: 1;
+}
+100% {
+width: 100%;
+opacity: 0;
+}
 }

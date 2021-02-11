@@ -5,10 +5,14 @@
 <link rel="stylesheet" href="css/game.css">
 
 <body>
+<div class="container" id="container">
+<div class="preloader">
+<p>LOADING</p>
+</div>
+</div>
   <table>
     <tr>
       <button id="reset" class="gamebutton" onclick="this.blur();"></button>
-      <button id="pause" class= "gamebutton" onclick="this.blur();"></button>
     </tr>
   </tr>
   
@@ -19,14 +23,14 @@
   </ul>
 </table>
 <div class="menu"></div>
+<script>setTimeout( function(){
+   document.getElementById( 'container').style.transform= "scale(0)";
+    runGame(GAME_LEVELS, DOMDisplay);
+ },9000);
+ ocultar( 'win' );
+      ocultar( 'lose' ); 
+      </script>
 
-  <script>
-    
-      runGame(GAME_LEVELS, DOMDisplay);
-      ocultar( 'win' );
-      ocultar( 'lose' );
-    
-  </script>
   <div class="esc">Pulsa <strong>ESC</strong> para pausar</div>
   <img id="win">
   <img id="loser">
