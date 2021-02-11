@@ -1,3 +1,3 @@
 # Examen1
-Juego de mierda
+Este programa esta compuesto por html, css y javascript. En el html hay los vinculos con el css y el js depues en el body tenemos toda la interfaz del juego empezando por la pantalla de carga, tambien el boton reset o los parametros como las vidas, los niveles y la puntuacion. Despues en el css tenemos toda la parte de disenyo tanto las texturas como la presentacion del juego. Y Finalmente tenemos el Js uno relacionado a los niveles llamado 'levels.js' y el '16_game'. En el '16_game' lo primero que tenemos es la classe de los niveles como estan estructurados y donde va cada cosa, despues tenemos el state que es donde estan los paramtros principales del jugo como los nivels, vidas, personajes. Más adelante tenemos la creacion de la classe de player, lava y todas sus variantes, coin. Finalmente hay un segido de funciones entre ellas las mas importantes update y collide.
 
