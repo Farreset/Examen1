@@ -252,6 +252,7 @@ State.prototype.update = function(time, keys) {
   for (let actor of actors) {
     if (actor != player && overlap(actor, player)) {
       newState = actor.collide(newState);
+      
     }
   }
   return newState;
@@ -272,10 +273,10 @@ Bala.prototype.collide = function(state) {
 };
 let coin = 0;
 Coin.prototype.collide = function(state) {
-  coin++;
+  coin += 100;
   let filtered = state.actors.filter(a => a != this);
   let status = state.status;
-  document.getElementById("score").innerHTML = "SCORE: " + coin;
+  document.getElementById("score").innerHTML = "SCORE: " + (kill + coin + killM) ;
   if (!filtered.some(a => a.type == "coin"))
     status = "won", coin== 0;
   return new State(state.level, filtered, status);
@@ -350,7 +351,7 @@ function runAnimation(frameFunc) {
   }
   requestAnimationFrame(frame);
 }
-
+//funcion de pausa
 function runLevel(level, Display) {
 
   let display = new Display(document.body, level);
@@ -414,19 +415,17 @@ function trackKeys(keys) {
   };
   return down;
 }
+//funcion principal juego 
 async function runGame ( plans, Display )
 {
-  
   this.lives = 5;
   document.getElementById("reset").addEventListener("click", () => { document.location.reload();});
-
   this.livesView = document.getElementById( "lives" );
   this.levelView = document.getElementById( "level" );
   for ( let level = 0; level < plans.length && lives > 0;) {
     let status = await runLevel(new Level(plans[level]),
                                 Display);
-    
-    
+
     if ( status == "won" )
     {
       level++;
@@ -438,23 +437,25 @@ async function runGame ( plans, Display )
       lives--;
       this.livesView.innerHTML = "LIVES: " +this.lives;
     }
-      
-  }
-  if ( lives > 0 )
-  {
-    console.log( "You've won!" );
-    document.location.reload();
-    document.write()
-  } 
-  else
-  {
-console.log( "PERDISTE!" );
-    document.location.reload();
-    
+    if ( lives <= 0 ) {
+      show( 'loser' );
+    } else  {
+      show( 'win' );
+    } 
   }
  
 }
+//imagen final 
+function oculto( id ) {
+  var elemento = document.getElementById( id );
+  elemento.style.display = "none";
+}
 
+function show( id ) {
+  document.getElementById( id ).style.display = 'block';
+}
+//variables del monstrup
+let killM = 0;
 var Monster = class Monster {
   constructor( pos, speed, reset ) {
     this.pos = pos;
@@ -480,12 +481,15 @@ var Monster = class Monster {
       return new Monster( this.pos, this.speed.times( -1 ) );
     }
   }
-
+//hitbox monstruo
   collide( state ) {
     let player = state.player;
-  
+    killM+=500;
     if ( player.pos.y + player.size.y < this.pos.y + 0.5 ) {
       let filtered = state.actors.filter( a => a != this );
+      document.getElementById("score").innerHTML = "SCORE: " + (kill + coin + killM);
+      if (!filtered.some(a => a.type == "kill"))
+        killM == 0;
       return new State( state.level, filtered, state.status );
       
     } else {
@@ -497,13 +501,14 @@ var Monster = class Monster {
 Monster.prototype.size = new Vec( 4.5, 4 );
 levelChars[ "M" ] = Monster;
 
+let kill = 0;
 var Enemy = class Enemy {
   constructor( pos, speed, reset ) {
     this.pos = pos;
     this.speed = speed;
     this.reset = reset;
   }
-
+ 
   get type() {
     return "enemy";
   }
@@ -525,19 +530,25 @@ var Enemy = class Enemy {
 
   collide( state ) {
     let player = state.player;
-  
+  kill += 250
     if ( player.pos.y + player.size.y < this.pos.y + 0.5 ) {
       let filtered = state.actors.filter( a => a != this );
+      document.getElementById("score").innerHTML = "SCORE: " + (kill + coin + killM);
+      if (!filtered.some(a => a.type == "kill"))
+        kill == 0;
       return new State( state.level, filtered, state.status );
       
     } else {
+    
       return new State( state.level, state.actors, "lost" );
     }
   }
 }
 
-Enemy.prototype.size = new Vec( 1.5, 2 );
+Enemy.prototype.size = new Vec( 1,1.5 );
 levelChars[ "e" ] = Enemy;
 
 
 
+
+  

@@ -21,9 +21,13 @@
 <div class="menu"></div>
 
   <script>
-      
-    runGame(GAME_LEVELS, DOMDisplay);
-  
+    
+      runGame(GAME_LEVELS, DOMDisplay);
+      ocultar( 'win' );
+      ocultar( 'lose' );
+    
   </script>
   <div class="esc">Pulsa <strong>ESC</strong> para pausar</div>
+  <img id="win">
+  <img id="loser">
 </body>
